@@ -1,0 +1,12 @@
+<%inherit file="/base/index.html"/>
+<ul id="editInPlace">
+% for inbox in c.inboxes:
+    <li>
+        <span>${inbox.created}</span>
+        <p id="inbox_${inbox.id}" class="edit">${inbox.content}</p>
+        ${h.form_start(h.url_for(controller='page', action='deleteInbox', id=inbox.id), method="post")}
+        ${h.field(field=h.submit(value="Delete", name='submit', id=None))}
+        ${h.form_end()}
+    </li>
+% endfor
+</ul>

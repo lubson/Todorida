@@ -1,0 +1,30 @@
+<%page args="task, realm_id"/>
+<%!import mygtd.lib.gtdlib as l%>
+
+<div>
+    <h4>${task.name}</h4>
+    <span>
+         % if (task.state == 'active' or task.state == 'waiting'):
+            <em>${l.duePhrase(task.due)} </em>
+         % endif
+
+         % if ((task.state == 'active' or task.state == 'waiting') and task.scheduled is not None):
+            <em>${task.scheduled}</em>
+         % endif
+
+        <form action="${(h.url_for(controller='page', action='changeStateOfTask'))}" method="post">
+            <input type="hidden" name="realm_id" value="${realm_id}"/>
+            <input type="hidden" name="project_id" value="${task.project_id}"/>
+            <input type="hidden" name="task_id" value="${task.id}"/>
+            <input type="hidden" name="task_state" value="archived"/>
+            <button type="submit">Complete</button>
+        </form>
+        <form action="${(h.url_for(controller='page', action='changeStateOfTask'))}" method="post">
+            <input type="hidden" name="realm_id" value="${realm_id}"/>
+            <input type="hidden" name="project_id" value="${task.project_id}"/>
+            <input type="hidden" name="task_id" value="${task.id}"/>
+            <input type="hidden" name="task_state" value="removed"/>
+            <button type="submit">Delete</button>
+        </form>
+    </span>
+</div>

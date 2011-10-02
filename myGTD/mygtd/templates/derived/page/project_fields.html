@@ -1,0 +1,43 @@
+<form action="/page/saveProject" method="post">
+    <div>
+        <input name="id" type="hidden"/>
+    </div>
+
+    <div>
+        <input name="name" type="text"/>
+    </div>
+
+    <div>
+        <textarea cols="30" rows="8" name="note"></textarea>
+    </div>
+
+    <div>
+        <input name="tags" type="text"/>
+    </div>
+
+    <div class="datefield">
+        <input id="dateProjectDue" name="due" type="text" value=""/>
+        <button id="showDateProjectDue" title="Show Calendar" type="button">
+            <img alt="Calendar" height="18" src="/yui/2.9.0/assets/calbtn.gif" width="18"/>
+        </button>
+    </div>
+
+    <div>
+        <select id="realm_id" name="realm_id">
+            <option value="1">Work</option>
+            <option value="2">Home</option>
+        </select>
+    </div>
+
+    <div>
+        <select name="state">
+            <option value="active">Active</option>
+            <option value="someday">Someday</option>
+            <option value="archived">Archived</option>
+        </select>
+    </div>
+
+    <div><button>Save</button></div>
+
+    <div><button id="hideProjectForm" title="Close form" type="reset">Cancel</button></div>
+</form>

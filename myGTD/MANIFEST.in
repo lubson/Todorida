@@ -1,0 +1,3 @@
+include mygtd/config/deployment.ini_tmpl
+recursive-include mygtd/public *
+recursive-include mygtd/templates *

@@ -1,0 +1,56 @@
+<form action="/page/createTask" method="post">
+    <div>
+        <input name="name" type="text"/>
+    </div>
+
+
+    <div>
+        <textarea name="note" cols="30" rows="8"></textarea>
+
+        <select id="task_realm_id" name="task_realm_id" onchange="callAjax('/page/getRelevantProjects', 'realm', 'relevantProjects'); return false;">
+            <option value="1">Work</option>
+            <option value="2">Home</option>
+        </select>
+
+       <select id="relevantProjects" name="relevantProjects">
+            <option value="1"></option>
+            <option value="21">Aloha</option>
+            <option value="20">Delay</option>
+            <option value="12">Due Today</option>
+            <option value="39">Jen tak</option>
+            <option value="11">Project s due</option>
+            <option value="4">Stat se is-technikem</option>
+        </select>
+
+        <select name="state">
+            <option value="active">Active</option>
+            <option value="waiting">Waiting</option>
+            <option value="someday">Someday</option>
+            <option value="archived">Archived</option>
+        </select>
+    </div>
+
+    <div>
+        <input name="tags" type="text"/>
+    </div>
+
+    <div class="datefield">
+        <input id="dateTaskScheduled" name="due" type="text" value=""/>
+        <button id="showDateTaskScheduled" title="Show Calendar" type="button">
+            <img alt="Calendar" height="18" width="18" src="/yui/2.9.0/assets/calbtn.gif"/>
+        </button>
+    </div>
+
+    <div class="datefield">
+        <input id="dateTaskDue" name="due" type="text" value=""/>
+        <button id="showDateTaskDue" title="Show Calendar" type="button">
+            <img alt="Calendar" height="18" width="18" src="/yui/2.9.0/assets/calbtn.gif"/>
+        </button>
+    </div>
+
+    
+    <div>
+        <button>Save</button>
+        <button id="hideTaskForm" title="Close form" type="reset">Cancel</button>
+    </div>
+</form>

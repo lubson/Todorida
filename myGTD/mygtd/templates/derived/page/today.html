@@ -1,0 +1,35 @@
+<%inherit file="/base/index.html"/>
+<%!import mygtd.lib.gtdlib as l%>
+<div id="today">
+   
+% for project in c.today:
+    % if project.name == 'next':
+        <ul>
+            % for task in project.tasks:
+                % if (task.state == 'active' or task.state=='waiting') and (l.isInToday(task.due) or l.isInToday(task.scheduled)):
+                    <li>
+                        <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
+                        ${taskView.body(task, project.realm_id)}
+                    </li>
+                % endif
+            % endfor
+        </ul>
+    % endif
+% endfor
+
+% for project in c.today:
+    % if project.name != 'next':
+        <a href="${(h.url_for(controller='page', action='project', id=project.id))}" ><h3>${project.name}</h3></a>
+        <ul>
+            % for task in project.tasks:
+                % if (task.state == 'active' or task.state=='waiting') and (l.isInToday(task.due) or l.isInToday(task.scheduled)):
+                    <li>
+                        <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
+                        ${taskView.body(task, project.realm_id)}
+                    </li>
+                % endif
+            % endfor
+        </ul>
+    % endif
+% endfor
+</div>

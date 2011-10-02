@@ -1,0 +1,59 @@
+<%inherit file="/base/index.html"/>
+<div project="project_${c.project.id}">
+    <div class="project_header">
+        <a onclick="fillProjectForm('${c.project.id}', '${c.project.name}', '${c.project.note}','${c.project.due}','${c.project.realm_id}','${c.project.state}')"><h3>${c.project.name}</h3><i>${c.realmName}</i></a>
+    </div>
+<!--
+PSEUDOFORMAT DATETIME (dolar je nahrazen #)
+'#{c.project.scheduled.day}-#{c.project.scheduled.month}-#{c.project.scheduled.year}', '#{c.project.due.day}-#{c.project.due.month}-#{c.project.due.year}
+-->
+<%def name="duePhrase(date)">
+    % if date is not None:
+        <% deltaDue = (date - c.today).days + 1%>
+        % if deltaDue > 1:
+            ${'Due in ' + str(deltaDue) + ' days'}
+        % elif deltaDue == 1:
+            ${'Tomorrow'}
+        % elif deltaDue == 0:
+            ${'Today'}
+        % elif deltaDue == -1:
+            ${'Yesterday'}
+        % else:
+            ${str((-1)*deltaDue) + ' days late'}
+        % endif
+    % endif
+</%def>
+
+<%
+    state = {}
+    state['active'], state['waiting'], state['someday'], state['completed'] = [], [], [], []
+    for task in c.project.tasks:
+        if task.state == 'active':
+            state['active'].append(task)
+        elif task.state == 'waiting':
+            state['waiting'].append(task)
+        elif task.state == 'someday':
+            state['someday'].append(task)
+        elif task.state == 'archived':
+            state['completed'].append(task)
+
+%>
+    <div class="project_content">
+    % if (c.project.due is not None):
+        <p>${duePhrase(c.project.due)}</p>
+    % endif
+    % for category in state:
+        % if len(state[category])>0:
+            <h4>${category.capitalize()}</h4>
+            <ul>
+            % for task in state[category]:
+                <li>
+                      <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
+                      ${taskView.body(task, c.project.realm_id)}
+                </li>
+            % endfor
+            </ul>
+        % endif
+    % endfor
+    </div>
+</div>

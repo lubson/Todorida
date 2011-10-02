@@ -1,0 +1,30 @@
+<%inherit file="/base/index.html"/>
+<div id="waiting">
+% for project in c.waiting:
+    % if project.name == 'next':
+        <ul>
+            % for task in project.getAllTasks(state='waiting'):
+                  <li>
+                      <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
+                      ${taskView.body(task, project.realm_id)}
+
+                  </li>
+            % endfor
+        </ul>
+    % endif
+% endfor
+
+% for project in c.waiting:
+    % if project.name != 'next':
+        <a href="${(h.url_for(controller='page', action='project', id=project.id))}" ><h3>${project.name}</h3></a>
+        <ul>
+            % for task in project.getAllTasks(state='waiting'):
+                  <li>
+                      <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
+                      ${taskView.body(task, project.realm_id)}
+                  </li>
+            % endfor
+        </ul>
+    % endif
+% endfor
+</div>

@@ -1,0 +1,35 @@
+<%inherit file="/base/index.html"/>
+<div id="projects">
+
+
+% for realm in c.realms:
+    <h3>${realm.name}</h3>
+<%
+        activeProjects = realm.getAllProjects(state='active')
+        somedayProjects = realm.getAllProjects(state='someday')
+%>
+
+    % if len(activeProjects) > 0 :
+        <h4>Active <span>${len(activeProjects)}</span></h4>
+    % endif
+    % for project in activeProjects:
+        <ul>
+            <li>
+                <a href="${(h.url_for(controller='page', action='project', id=project.id))}">${project.name}</a>
+            </li>
+        </ul>
+    % endfor
+
+
+    % if len(somedayProjects) > 0:
+        <h4>Someday <span>${len(somedayProjects)}</span></h4>
+    % endif
+    % for project in somedayProjects:
+        <ul>
+            <li>
+                <a href="${(h.url_for(controller='page', action='project', id=project.id))}">${project.name}</a>
+            </li>
+        </ul>
+    % endfor
+% endfor
+</div>

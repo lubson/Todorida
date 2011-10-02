@@ -1,0 +1,18 @@
+<%inherit file="/base/index.html"/>
+<%!import mygtd.lib.gtdlib as l%>
+<div>
+
+% for inboxTask in c.specificTasks['inbox']:
+<li>
+    <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
+    ${taskView.body(inboxTask,1)}
+</li>
+% endfor
+<br/>
+% for projectCouple in c.specificTasks['otherProjects']:
+    ${projectCouple[0].name}
+    ${projectCouple[1][0]}
+% endfor
+
+
+</div>
