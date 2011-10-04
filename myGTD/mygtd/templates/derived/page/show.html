@@ -2,16 +2,31 @@
 <%!import mygtd.lib.gtdlib as l%>
 <div>
 
-% for inboxTask in c.specificTasks['inbox']:
+% for couple in c.specificTasks['inboxCouple']:
+<%
+    task = couple[0]
+    realm_id = couple[1]
+%>
 <li>
     <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
-    ${taskView.body(inboxTask,1)}
+    ${taskView.body(task,realm_id)}
 </li>
 % endfor
 <br/>
-% for projectCouple in c.specificTasks['otherProjects']:
-    ${projectCouple[0].name}
-    ${projectCouple[1][0]}
+% for couple in c.specificTasks['otherProjectsCouple']:
+<%
+    project = couple[0]
+    selectedIds = couple[1]
+%>
+    <a href="${(h.url_for(controller='page', action='project', id=project.id))}" ><h3>${project.name}</h3></a>
+        <ul>
+            % for task_id in selectedIds:
+                  <li>
+                      <%namespace name="comp" file="/derived/page/task_view.html" name="taskView" import="*"/>
+                      ${taskView.body(project.getTask(task_id), project.realm_id)}
+                  </li>
+            % endfor
+        </ul>
 % endfor
 
 

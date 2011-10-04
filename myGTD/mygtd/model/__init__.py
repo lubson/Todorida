@@ -128,13 +128,13 @@ class UserData(object):
         return sums
 
     def getSpecificTasks(self, mode):
-        specificTasks = {'inbox':[],'otherProjects':[]}
+        specificTasks = {'inboxCouple':[],'otherProjectsCouple':[]}
         realms = self.getAllRealms(show=True)
         for realm in realms:
             if mode == 'waiting':
                 for inboxTask in realm.getProject().tasks:
                     if inboxTask.state == 'waiting':
-                        specificTasks['inbox'].append(inboxTask)
+                        specificTasks['inboxCouple'].append((inboxTask,realm.id))
                 for project in realm.getAllProjects(state='active', next=False):
                     tasks = project.getAllTasks(state='waiting')
                     if  tasks != []:
@@ -142,36 +142,57 @@ class UserData(object):
                         projectCouple[0] = project
                         for task in tasks:
                             projectCouple[1].append(task.id)
-                        specificTasks['otherProjects'].append(projectCouple)
+                        specificTasks['otherProjectsCouple'].append(projectCouple)
 
             elif mode == 'today':
                 for inboxTask in realm.getProject().tasks:
                     if (inboxTask.state == 'active' or inboxTask.state=='waiting') and \
-                        isInToday(inboxTask.scheduled):
-                            specificTasks['inbox'].append(inboxTask)
+                        (isInToday(inboxTask.scheduled) or isInToday(inboxTask.due)):
+                        specificTasks['inboxCouple'].append((inboxTask,realm.id))
                 for project in realm.getAllProjects(state='active', next=False):
                     wasAdded = False
                     for task in project.tasks:
-                        if isInToday(task.scheduled) and isInToday(task.scheduled) and (task.state == 'active' or task.state == 'waiting'):
+                        if (isInToday(task.scheduled) or isInToday(task.due)) and \
+                           (task.state == 'active' or task.state == 'waiting'):
                             if not wasAdded:
-                                specificTasks['otherProjects'][0].append(project)
+                                projectCouple = [Project,[]]
+                                projectCouple[0] = project
                                 wasAdded = True
-                            specificTasks['otherProjects'][1].append(task.id)
+                            projectCouple[1].append(task.id)
+                    if wasAdded:
+                        specificTasks['otherProjectsCouple'].append(projectCouple)
+
 
             elif mode == 'scheduled':
                 for inboxTask in realm.getProject().tasks:
                     if inboxTask.scheduled is not None and (inboxTask.state == 'active' or inboxTask.state == 'waiting'):
-                        specificTasks['inbox'].append(inboxTask)
+                        specificTasks['inboxCouple'].append((inboxTask,realm.id))
                 for project in realm.getAllProjects(state='active', next=False):
                     wasAdded = False
                     for task in project.tasks:
-                        if task.scheduled is not None:
+                        if task.scheduled is not None and (task.state == 'active' or task.state == 'waiting'):
                             if not wasAdded:
-                                specificTasks['otherProjects'][0].append(project)
+                                projectCouple = [Project,[]]
+                                projectCouple[0] = project
                                 wasAdded = True
-                            specificTasks['otherProjects'][1].append(task.id)
+                            projectCouple[1].append(task.id)
+                    if wasAdded:
+                        specificTasks['otherProjectsCouple'].append(projectCouple)
             else:
-                pass
+                for inboxTask in realm.getProject().tasks:
+                    if inboxTask.state == 'active' or inboxTask.state == 'waiting':
+                        specificTasks['inboxCouple'].append((inboxTask,realm.id))
+                for project in realm.getAllProjects(state='active', next=False):
+                    wasAdded = False
+                    for task in project.tasks:
+                        if task.state == 'active' or task.state == 'waiting':
+                            if not wasAdded:
+                                projectCouple = [Project,[]]
+                                projectCouple[0] = project
+                                wasAdded = True
+                            projectCouple[1].append(task.id)
+                    if wasAdded:
+                        specificTasks['otherProjectsCouple'].append(projectCouple)
         return specificTasks
 
 

@@ -316,4 +316,5 @@ class PageController(BaseController):
     def show(self):
         ud = model.UserManager.getUserData(request.environ.get('REMOTE_USER'))
         c.specificTasks = ud.getSpecificTasks(request.GET.get('mode','inbox'))
+        #return ud.getSpecificTasks(request.GET.get('mode','inbox'))['otherProjectsCouple']
         return render('/derived/page/show.html')
